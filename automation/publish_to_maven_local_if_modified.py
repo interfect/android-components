@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.7
 
 # Purpose: Publish android packages to local maven repo, but only if changed since last publish.
 # Dependencies: None
