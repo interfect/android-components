@@ -84,34 +84,57 @@ class AddonCollectionProvider(
             null
         }
 
-        return cachedAddons ?: client.fetch(
-                Request(
-                    url = listOf(
-                        serverURL,
-                        API_VERSION,
-                        "accounts/account",
-                        collectionAccount,
-                        "collections",
-                        collectionName,
-                        "addons"
-                    ).joinToString("/"),
-                    readTimeout = Pair(readTimeoutInSeconds ?: DEFAULT_READ_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS)
+        if (cachedAddons != null) {
+            return cachedAddons
+        } else {
+            // Fetch and compile all the pages into one object we can serialize in the cache
+            var compiledResponse: JSONObject? = null
+            // Each page tells us where to get the next page, if there is one
+            var nextURL: String? = listOf(
+                serverURL,
+                API_VERSION,
+                "accounts/account",
+                collectionAccount,
+                "collections",
+                collectionName,
+                "addons"
+            ).joinToString("/")
+            while (nextURL != null) {
+                client.fetch(
+                    Request(
+                        url = nextURL,
+                        readTimeout = Pair(readTimeoutInSeconds ?: DEFAULT_READ_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS)
+                    )
                 )
-            )
-            .use { response ->
-                if (response.isSuccess) {
-                    val responseBody = response.body.string(Charsets.UTF_8)
-                    JSONObject(responseBody).getAddons().also {
-                        if (maxCacheAgeInMinutes > 0) {
-                            writeToDiskCache(responseBody)
+                .use { response ->
+                    if (response.isSuccess) {
+                        val currentResponse = JSONObject(response.body.string(Charsets.UTF_8))
+                        if (compiledResponse == null) {
+                            compiledResponse = currentResponse
+                        } else {
+                            // Write the addons into the first response
+                            val currentResults = currentResponse.getJSONArray("results")
+                            val compiledResults = compiledResponse!!.getJSONArray("results")
+                            (0 until currentResults.length()).map { index ->
+                                compiledResults.put(compiledResults.length(), currentResults.getJSONObject(index))
+                            }
                         }
+                        nextURL = if (currentResponse.isNull("next")) null else currentResponse.getString("next")
+                    } else {
+                        val errorMessage = "Failed to fetch addon collection. Status code: ${response.status}"
+                        logger.error(errorMessage)
+                        throw IOException(errorMessage)
                     }
-                } else {
-                    val errorMessage = "Failed to fetch addon collection. Status code: ${response.status}"
-                    logger.error(errorMessage)
-                    throw IOException(errorMessage)
                 }
             }
+
+            // Now we have an entire object
+            return compiledResponse!!.getAddons().also {
+                if (maxCacheAgeInMinutes > 0) {
+                    writeToDiskCache(compiledResponse!!.toString())
+                }
+            }
+        }
     }
 
     /**
