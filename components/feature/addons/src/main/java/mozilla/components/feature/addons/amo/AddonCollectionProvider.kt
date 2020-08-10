@@ -95,7 +95,7 @@ class AddonCollectionProvider(
                 "collections",
                 collectionName,
                 "addons"
-            ).joinToString("/")).also {
+            ).joinToString("/"), readTimeoutInSeconds ?: DEFAULT_READ_TIMEOUT_IN_SECONDS).also {
                 // Cache the JSON object before we parse out the addons
                 if (maxCacheAgeInMinutes > 0) {
                     writeToDiskCache(it.toString())
@@ -110,11 +110,12 @@ class AddonCollectionProvider(
      * of the first page. Returns that coalesced object.
      *
      * @param url URL of the first page to fetch
+     * @param readTimeoutInSeconds timeout in seconds to use when fetching each page.
      * @throws IOException if the request failed, or could not be executed due to cancellation,
      * a connectivity problem or a timeout.
      */
     @Throws(IOException::class)
-    suspend fun getAllPages(url: String): JSONObject {
+    suspend fun getAllPages(url: String, readTimeoutInSeconds: Long): JSONObject {
         // Fetch and compile all the pages into one object we can return
         var compiledResponse: JSONObject? = null
         // Each page tells us where to get the next page, if there is one
@@ -123,7 +124,7 @@ class AddonCollectionProvider(
             client.fetch(
                 Request(
                     url = nextURL,
-                    readTimeout = Pair(readTimeoutInSeconds ?: DEFAULT_READ_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS)
+                    readTimeout = Pair(readTimeoutInSeconds, TimeUnit.SECONDS)
                 )
             )
             .use { response ->
