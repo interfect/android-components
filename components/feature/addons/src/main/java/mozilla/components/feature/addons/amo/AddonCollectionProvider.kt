@@ -87,10 +87,7 @@ class AddonCollectionProvider(
         if (cachedAddons != null) {
             return cachedAddons
         } else {
-            // Fetch and compile all the pages into one object we can serialize in the cache
-            var compiledResponse: JSONObject? = null
-            // Each page tells us where to get the next page, if there is one
-            var nextURL: String? = listOf(
+            return getAllPages(listOf(
                 serverURL,
                 API_VERSION,
                 "accounts/account",
@@ -98,43 +95,55 @@ class AddonCollectionProvider(
                 "collections",
                 collectionName,
                 "addons"
-            ).joinToString("/")
-            while (nextURL != null) {
-                client.fetch(
-                    Request(
-                        url = nextURL,
-                        readTimeout = Pair(readTimeoutInSeconds ?: DEFAULT_READ_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS)
-                    )
-                )
-                .use { response ->
-                    if (response.isSuccess) {
-                        val currentResponse = JSONObject(response.body.string(Charsets.UTF_8))
-                        if (compiledResponse == null) {
-                            compiledResponse = currentResponse
-                        } else {
-                            // Write the addons into the first response
-                            val currentResults = currentResponse.getJSONArray("results")
-                            val compiledResults = compiledResponse!!.getJSONArray("results")
-                            (0 until currentResults.length()).map { index ->
-                                compiledResults.put(compiledResults.length(), currentResults.getJSONObject(index))
-                            }
-                        }
-                        nextURL = if (currentResponse.isNull("next")) null else currentResponse.getString("next")
-                    } else {
-                        val errorMessage = "Failed to fetch addon collection. Status code: ${response.status}"
-                        logger.error(errorMessage)
-                        throw IOException(errorMessage)
-                    }
-                }
-            }
-
-            // Now we have an entire object
-            return compiledResponse!!.getAddons().also {
+            ).joinToString("/")).also {
+                // Cache the JSON object before we parse out the addons
                 if (maxCacheAgeInMinutes > 0) {
-                    writeToDiskCache(compiledResponse!!.toString())
+                    writeToDiskCache(it.toString())
                 }
+            }.getAddons()
+        }
+    }
+
+    /**
+     * Fetches all pages of add-ons from the given URL (following the "next"
+     * field in the returned JSON) and combines the "results" arrays into that
+     * of the first page. Returns that coalesced object.
+     *
+     * @param url URL of the first page to fetch
+     * @throws IOException if the request failed, or could not be executed due to cancellation,
+     * a connectivity problem or a timeout.
+     */
+    @Throws(IOException::class)
+    suspend fun getAllPages(url: String): JSONObject {
+        // Fetch and compile all the pages into one object we can return
+        var compiledResponse: JSONObject? = null
+        // Each page tells us where to get the next page, if there is one
+        var nextURL: String? = url
+        while (nextURL != null) {
+            client.fetch(
+                Request(
+                    url = nextURL,
+                    readTimeout = Pair(readTimeoutInSeconds ?: DEFAULT_READ_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS)
+                )
+            )
+            .use { response ->
+                if (!response.isSuccess) {
+                    val errorMessage = "Failed to fetch addon collection. Status code: ${response.status}"
+                    logger.error(errorMessage)
+                    throw IOException(errorMessage)
+                }
+
+                val currentResponse = JSONObject(response.body.string(Charsets.UTF_8))
+                if (compiledResponse == null) {
+                    compiledResponse = currentResponse
+                } else {
+                    // Write the addons into the first response
+                    currentResponse.getJSONArray("results").concat(compiledResponse!!.getJSONArray("results"))
+                }
+                nextURL = if (currentResponse.isNull("next")) null else currentResponse.getString("next")
             }
         }
+        return compiledResponse!!
     }
 
     /**
@@ -313,5 +322,14 @@ internal fun JSONObject.getSafeMap(valueKey: String): Map<String, String> {
                 map[key] = jsonObject.getSafeString(key)
             }
         map
+    }
+}
+
+/**
+ * Concatenates the given JSONArray onto this one.
+ */
+internal fun JSONArray.concat(other: JSONArray) {
+    (0 until length()).map { index ->
+        put(length(), other.getJSONObject(index))
     }
 }
