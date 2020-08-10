@@ -139,7 +139,7 @@ class AddonCollectionProvider(
                     compiledResponse = currentResponse
                 } else {
                     // Write the addons into the first response
-                    currentResponse.getJSONArray("results").concat(compiledResponse!!.getJSONArray("results"))
+                    compiledResponse!!.getJSONArray("results").concat(currentResponse.getJSONArray("results"))
                 }
                 nextURL = if (currentResponse.isNull("next")) null else currentResponse.getString("next")
             }
@@ -330,7 +330,7 @@ internal fun JSONObject.getSafeMap(valueKey: String): Map<String, String> {
  * Concatenates the given JSONArray onto this one.
  */
 internal fun JSONArray.concat(other: JSONArray) {
-    (0 until length()).map { index ->
+    (0 until other.length()).map { index ->
         put(length(), other.getJSONObject(index))
     }
 }
