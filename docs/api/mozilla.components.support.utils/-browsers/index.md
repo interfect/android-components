@@ -2,7 +2,7 @@
 
 # Browsers
 
-`class Browsers` [(source)](https://github.com/mozilla-mobile/android-components/blob/master/components/support/utils/src/main/java/mozilla/components/support/utils/Browsers.kt#L26)
+`class Browsers` [(source)](https://github.com/mozilla-mobile/android-components/blob/master/components/support/utils/src/main/java/mozilla/components/support/utils/Browsers.kt#L29)
 
 Helpful tools for dealing with other browsers on this device.
 
@@ -44,6 +44,7 @@ val browsers = Browsers.forUrl(context, url)`
 | Name | Summary |
 |---|---|
 | [all](all.md) | `fun all(context: <ERROR CLASS>): `[`Browsers`](./index.md)<br>Collect information about all installed browsers and return a [Browsers](./index.md) object containing that data. |
+| [findResolvers](find-resolvers.md) | `fun findResolvers(context: <ERROR CLASS>, packageManager: <ERROR CLASS>, includeThisApp: `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)` = true): `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<<ERROR CLASS>>`<br>Finds all the [ResolveInfo](#) for the installed browsers.`fun findResolvers(context: <ERROR CLASS>, packageManager: <ERROR CLASS>, url: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, includeThisApp: `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)` = true, contentType: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`? = null): `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<<ERROR CLASS>>`<br>Finds all the [ResolveInfo](#) for the installed browsers that can handle the specified URL [url](find-resolvers.md#mozilla.components.support.utils.Browsers.Companion$findResolvers(, , kotlin.String, kotlin.Boolean, kotlin.String)/url). |
 | [forUrl](for-url.md) | `fun forUrl(context: <ERROR CLASS>, url: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`): `[`Browsers`](./index.md)<br>Collect information about all installed browsers that can handle the specified URL and return a [Browsers](./index.md) object containing that data. |
 
 ### Extension Functions

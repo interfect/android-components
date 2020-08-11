@@ -124,6 +124,7 @@
 | [mozilla.components.feature.downloads](mozilla.components.feature.downloads/index.md) |  |
 | [mozilla.components.feature.downloads.facts](mozilla.components.feature.downloads.facts/index.md) |  |
 | [mozilla.components.feature.downloads.manager](mozilla.components.feature.downloads.manager/index.md) |  |
+| [mozilla.components.feature.downloads.ui](mozilla.components.feature.downloads.ui/index.md) |  |
 | [mozilla.components.feature.findinpage](mozilla.components.feature.findinpage/index.md) |  |
 | [mozilla.components.feature.findinpage.facts](mozilla.components.feature.findinpage.facts/index.md) |  |
 | [mozilla.components.feature.findinpage.view](mozilla.components.feature.findinpage.view/index.md) |  |

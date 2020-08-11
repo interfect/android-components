@@ -2,7 +2,7 @@
 
 # ANDROID_STOCK_BROWSER
 
-`ANDROID_STOCK_BROWSER` [(source)](https://github.com/mozilla-mobile/android-components/blob/master/components/support/utils/src/main/java/mozilla/components/support/utils/Browsers.kt#L66)
+`ANDROID_STOCK_BROWSER` [(source)](https://github.com/mozilla-mobile/android-components/blob/master/components/support/utils/src/main/java/mozilla/components/support/utils/Browsers.kt#L69)
 
 ### Inherited Properties
 

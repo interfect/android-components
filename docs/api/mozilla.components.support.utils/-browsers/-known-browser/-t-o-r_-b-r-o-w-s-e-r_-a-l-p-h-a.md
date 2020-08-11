@@ -2,7 +2,7 @@
 
 # TOR_BROWSER_ALPHA
 
-`TOR_BROWSER_ALPHA` [(source)](https://github.com/mozilla-mobile/android-components/blob/master/components/support/utils/src/main/java/mozilla/components/support/utils/Browsers.kt#L72)
+`TOR_BROWSER_ALPHA` [(source)](https://github.com/mozilla-mobile/android-components/blob/master/components/support/utils/src/main/java/mozilla/components/support/utils/Browsers.kt#L75)
 
 ### Inherited Properties
 

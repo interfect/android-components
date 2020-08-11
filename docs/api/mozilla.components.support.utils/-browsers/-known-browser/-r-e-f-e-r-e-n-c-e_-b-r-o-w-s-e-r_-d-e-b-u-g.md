@@ -2,7 +2,7 @@
 
 # REFERENCE_BROWSER_DEBUG
 
-`REFERENCE_BROWSER_DEBUG` [(source)](https://github.com/mozilla-mobile/android-components/blob/master/components/support/utils/src/main/java/mozilla/components/support/utils/Browsers.kt#L49)
+`REFERENCE_BROWSER_DEBUG` [(source)](https://github.com/mozilla-mobile/android-components/blob/master/components/support/utils/src/main/java/mozilla/components/support/utils/Browsers.kt#L52)
 
 ### Inherited Properties
 

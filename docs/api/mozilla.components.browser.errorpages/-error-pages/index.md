@@ -2,7 +2,7 @@
 
 # ErrorPages
 
-`object ErrorPages` [(source)](https://github.com/mozilla-mobile/android-components/blob/master/components/browser/errorpages/src/main/java/mozilla/components/browser/errorpages/ErrorPages.kt#L12)
+`object ErrorPages` [(source)](https://github.com/mozilla-mobile/android-components/blob/master/components/browser/errorpages/src/main/java/mozilla/components/browser/errorpages/ErrorPages.kt#L13)
 
 ### Functions
 

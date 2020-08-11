@@ -2,7 +2,7 @@
 
 # UC_BROWSER_MINI
 
-`UC_BROWSER_MINI` [(source)](https://github.com/mozilla-mobile/android-components/blob/master/components/support/utils/src/main/java/mozilla/components/support/utils/Browsers.kt#L64)
+`UC_BROWSER_MINI` [(source)](https://github.com/mozilla-mobile/android-components/blob/master/components/support/utils/src/main/java/mozilla/components/support/utils/Browsers.kt#L67)
 
 ### Inherited Properties
 

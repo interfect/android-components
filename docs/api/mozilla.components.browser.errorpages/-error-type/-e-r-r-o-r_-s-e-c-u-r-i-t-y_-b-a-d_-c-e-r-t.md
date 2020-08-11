@@ -2,7 +2,7 @@
 
 # ERROR_SECURITY_BAD_CERT
 
-`ERROR_SECURITY_BAD_CERT` [(source)](https://github.com/mozilla-mobile/android-components/blob/master/components/browser/errorpages/src/main/java/mozilla/components/browser/errorpages/ErrorPages.kt#L131)
+`ERROR_SECURITY_BAD_CERT` [(source)](https://github.com/mozilla-mobile/android-components/blob/master/components/browser/errorpages/src/main/java/mozilla/components/browser/errorpages/ErrorPages.kt#L132)
 
 ### Inherited Properties
 

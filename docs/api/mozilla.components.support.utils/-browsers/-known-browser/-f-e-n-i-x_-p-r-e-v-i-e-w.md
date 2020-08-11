@@ -2,7 +2,7 @@
 
 # FENIX_PREVIEW
 
-`FENIX_PREVIEW` [(source)](https://github.com/mozilla-mobile/android-components/blob/master/components/support/utils/src/main/java/mozilla/components/support/utils/Browsers.kt#L45)
+`FENIX_PREVIEW` [(source)](https://github.com/mozilla-mobile/android-components/blob/master/components/support/utils/src/main/java/mozilla/components/support/utils/Browsers.kt#L48)
 
 ### Inherited Properties
 

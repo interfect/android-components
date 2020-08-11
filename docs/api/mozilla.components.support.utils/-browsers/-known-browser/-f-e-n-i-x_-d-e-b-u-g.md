@@ -2,7 +2,7 @@
 
 # FENIX_DEBUG
 
-`FENIX_DEBUG` [(source)](https://github.com/mozilla-mobile/android-components/blob/master/components/support/utils/src/main/java/mozilla/components/support/utils/Browsers.kt#L46)
+`FENIX_DEBUG` [(source)](https://github.com/mozilla-mobile/android-components/blob/master/components/support/utils/src/main/java/mozilla/components/support/utils/Browsers.kt#L49)
 
 ### Inherited Properties
 

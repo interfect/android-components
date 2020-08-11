@@ -2,7 +2,7 @@
 
 # FIREFOX_LITE
 
-`FIREFOX_LITE` [(source)](https://github.com/mozilla-mobile/android-components/blob/master/components/support/utils/src/main/java/mozilla/components/support/utils/Browsers.kt#L43)
+`FIREFOX_LITE` [(source)](https://github.com/mozilla-mobile/android-components/blob/master/components/support/utils/src/main/java/mozilla/components/support/utils/Browsers.kt#L46)
 
 ### Inherited Properties
 

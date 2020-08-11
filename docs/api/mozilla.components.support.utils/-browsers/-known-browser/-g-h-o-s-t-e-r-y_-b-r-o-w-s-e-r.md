@@ -2,7 +2,7 @@
 
 # GHOSTERY_BROWSER
 
-`GHOSTERY_BROWSER` [(source)](https://github.com/mozilla-mobile/android-components/blob/master/components/support/utils/src/main/java/mozilla/components/support/utils/Browsers.kt#L81)
+`GHOSTERY_BROWSER` [(source)](https://github.com/mozilla-mobile/android-components/blob/master/components/support/utils/src/main/java/mozilla/components/support/utils/Browsers.kt#L84)
 
 ### Inherited Properties
 

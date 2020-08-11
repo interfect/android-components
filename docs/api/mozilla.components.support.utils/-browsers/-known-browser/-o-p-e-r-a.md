@@ -2,7 +2,7 @@
 
 # OPERA
 
-`OPERA` [(source)](https://github.com/mozilla-mobile/android-components/blob/master/components/support/utils/src/main/java/mozilla/components/support/utils/Browsers.kt#L58)
+`OPERA` [(source)](https://github.com/mozilla-mobile/android-components/blob/master/components/support/utils/src/main/java/mozilla/components/support/utils/Browsers.kt#L61)
 
 ### Inherited Properties
 
