@@ -4,13 +4,22 @@ title: Changelog
 permalink: /changelog/
 ---
 
-# 54.0.0-SNAPSHOT (In Development)
+# 55.0.0-SNAPSHOT (In Development)
 
-* [Commits](https://github.com/mozilla-mobile/android-components/compare/v53.0.0...master)
-* [Milestone](https://github.com/mozilla-mobile/android-components/milestone/113?closed=1)
+* [Commits](https://github.com/mozilla-mobile/android-components/compare/v54.0.0...master)
+* [Milestone](https://github.com/mozilla-mobile/android-components/milestone/114?closed=1)
 * [Dependencies](https://github.com/mozilla-mobile/android-components/blob/master/buildSrc/src/main/java/Dependencies.kt)
 * [Gecko](https://github.com/mozilla-mobile/android-components/blob/master/buildSrc/src/main/java/Gecko.kt)
 * [Configuration](https://github.com/mozilla-mobile/android-components/blob/master/buildSrc/src/main/java/Config.kt)
+
+
+# 54.0.0
+
+* [Commits](https://github.com/mozilla-mobile/android-components/compare/v53.0.0...v54.0.0)
+* [Milestone](https://github.com/mozilla-mobile/android-components/milestone/113?closed=1)
+* [Dependencies](https://github.com/mozilla-mobile/android-components/blob/v54.0.0/buildSrc/src/main/java/Dependencies.kt)
+* [Gecko](https://github.com/mozilla-mobile/android-components/blob/v54.0.0/buildSrc/src/main/java/Gecko.kt)
+* [Configuration](https://github.com/mozilla-mobile/android-components/blob/v54.0.0/buildSrc/src/main/java/Config.kt)
 
 * **concept-menu**
   * Added `orientation` parameter to `MenuController.show`. Passing null (the default) tells the menu to determine the best orientation itself.
@@ -35,6 +44,12 @@ permalink: /changelog/
   
 * **feature-addons**
   * ⚠️ **This is a breaking change**: Added a `collectionAccount` constructor argument to `AddonCollectionProvider` to override the default of `mozilla`. It has been inserted into the middle of the argument list, before `collectionName`, so code that passed later arguments positionally will need to change.
+
+* **concept-engine**
+  * Added the `cookiePurging` property to `TrackingProtectionPolicy` and `TrackingProtectionPolicyForSessionTypes` constructors to enable/disable cookie purging feature read more about it [here](https://blog.mozilla.org/blog/2020/08/04/latest-firefox-rolls-out-enhanced-tracking-protection-2-0-blocking-redirect-trackers-by-default/).
+
+* **browser-engine-nightly**
+  * Added `cookiePurging` to `TrackingProtectionPolicy.toContentBlockingSetting`.
 
 # 53.0.0
 
