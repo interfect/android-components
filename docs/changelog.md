@@ -12,6 +12,12 @@ permalink: /changelog/
 * [Gecko](https://github.com/mozilla-mobile/android-components/blob/master/buildSrc/src/main/java/Gecko.kt)
 * [Configuration](https://github.com/mozilla-mobile/android-components/blob/master/buildSrc/src/main/java/Config.kt)
 
+* **browser-engine-gecko**, **browser-engine-gecko-beta**, **browser-engine-gecko-nightly**
+  * Fixed issue [#7983](https://github.com/mozilla-mobile/android-components/issues/7983), crash when a file name wasn't provided when uploading a file.
+  
+* **service-glean**
+  * Glean was updated to v32.1.0
+    * The rate limiter now allows 15, rather than 10, pings per minute.
 
 # 54.0.0
 
