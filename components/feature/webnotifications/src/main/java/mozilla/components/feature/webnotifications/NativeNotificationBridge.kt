@@ -10,11 +10,9 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import androidx.annotation.DrawableRes
-import androidx.core.net.toUri
 import mozilla.components.browser.icons.BrowserIcons
 import mozilla.components.browser.icons.Icon.Source
 import mozilla.components.browser.icons.IconRequest
@@ -60,18 +58,21 @@ internal class NativeNotificationBridge(
             }
 
             builder.setSmallIcon(smallIcon)
-                .setSubText(sourceUrl.tryGetHostFromUrl())
                 .setContentTitle(title)
                 .setShowWhen(true)
                 .setWhen(timestamp)
                 .setAutoCancel(true)
+
+            sourceUrl?.let {
+                builder.setSubText(it.tryGetHostFromUrl())
+            }
 
             body?.let {
                 builder.setContentText(body)
                     .setStyle(Notification.BigTextStyle().bigText(body))
             }
 
-            loadIcon(iconUrl?.toUri(), Size.DEFAULT, true)?.let { iconBitmap ->
+            loadIcon(sourceUrl, iconUrl, Size.DEFAULT, true)?.let { iconBitmap ->
                 builder.setLargeIcon(iconBitmap)
             }
         }
@@ -82,13 +83,14 @@ internal class NativeNotificationBridge(
     /**
      * Load an icon for a notification.
      */
-    private suspend fun loadIcon(url: Uri?, size: Size, isPrivate: Boolean): Bitmap? {
+    private suspend fun loadIcon(url: String?, iconUrl: String?, size: Size, isPrivate: Boolean): Bitmap? {
         url ?: return null
+        iconUrl ?: return null
         val icon = icons.loadIcon(IconRequest(
-            url = url.toString(),
+            url = url,
             size = size,
             resources = listOf(IconRequest.Resource(
-                url = url.toString(),
+                url = iconUrl,
                 type = IconRequest.Resource.Type.MANIFEST_ICON
             )),
             isPrivate = isPrivate

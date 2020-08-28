@@ -15,10 +15,10 @@ import mozilla.components.browser.errorpages.ErrorType
 import mozilla.components.concept.engine.DefaultSettings
 import mozilla.components.concept.engine.EngineSession
 import mozilla.components.concept.engine.EngineSession.LoadUrlFlags
-import mozilla.components.concept.engine.EngineSession.TrackingProtectionPolicy
-import mozilla.components.concept.engine.EngineSession.TrackingProtectionPolicy.TrackingCategory
-import mozilla.components.concept.engine.EngineSession.TrackingProtectionPolicy.CookiePolicy
 import mozilla.components.concept.engine.EngineSession.SafeBrowsingPolicy
+import mozilla.components.concept.engine.EngineSession.TrackingProtectionPolicy
+import mozilla.components.concept.engine.EngineSession.TrackingProtectionPolicy.CookiePolicy
+import mozilla.components.concept.engine.EngineSession.TrackingProtectionPolicy.TrackingCategory
 import mozilla.components.concept.engine.HitResult
 import mozilla.components.concept.engine.UnsupportedSettingException
 import mozilla.components.concept.engine.content.blocking.Tracker
@@ -53,9 +53,10 @@ import org.mockito.ArgumentMatchers.anyBoolean
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyList
 import org.mockito.ArgumentMatchers.anyString
-import org.mockito.Mockito
+import org.mockito.Mockito.atLeastOnce
 import org.mockito.Mockito.never
 import org.mockito.Mockito.reset
+import org.mockito.Mockito.spy
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.verifyZeroInteractions
@@ -944,7 +945,7 @@ class GeckoEngineSessionTest {
             override fun getCurrentIndex() = currentIndex
         }
 
-        fun mockHistoryItem(title: String, uri: String): GeckoSession.HistoryDelegate.HistoryItem {
+        fun mockHistoryItem(title: String?, uri: String): GeckoSession.HistoryDelegate.HistoryItem {
             val item = mock<GeckoSession.HistoryDelegate.HistoryItem>()
             whenever(item.title).thenReturn(title)
             whenever(item.uri).thenReturn(uri)
@@ -956,11 +957,13 @@ class GeckoEngineSessionTest {
 
         historyDelegate.value.onHistoryStateChange(mock(), MockHistoryList(listOf(
             mockHistoryItem("Firefox", "https://firefox.com"),
-            mockHistoryItem("Mozilla", "http://mozilla.org")
+            mockHistoryItem("Mozilla", "http://mozilla.org"),
+            mockHistoryItem(null, "https://example.com")
         ), 1))
         verify(observer).onHistoryStateChanged(listOf(
             HistoryItem("Firefox", "https://firefox.com"),
-            HistoryItem("Mozilla", "http://mozilla.org")
+            HistoryItem("Mozilla", "http://mozilla.org"),
+            HistoryItem("https://example.com", "https://example.com")
         ), 1)
     }
 
@@ -1759,14 +1762,14 @@ class GeckoEngineSessionTest {
     fun `toggleDesktopMode should reload a non-mobile url when set to desktop mode`() {
         val mobileUrl = "https://m.example.com"
         val nonMobileUrl = "https://example.com"
-        val engineSession = Mockito.spy(GeckoEngineSession(runtime, geckoSessionProvider = geckoSessionProvider))
+        val engineSession = spy(GeckoEngineSession(runtime, geckoSessionProvider = geckoSessionProvider))
         engineSession.currentUrl = mobileUrl
 
         engineSession.toggleDesktopMode(true, reload = true)
-        verify(engineSession, Mockito.atLeastOnce()).loadUrl(nonMobileUrl, null, LoadUrlFlags.select(LoadUrlFlags.LOAD_FLAGS_REPLACE_HISTORY), null)
+        verify(engineSession, atLeastOnce()).loadUrl(nonMobileUrl, null, LoadUrlFlags.select(LoadUrlFlags.LOAD_FLAGS_REPLACE_HISTORY), null)
 
         engineSession.toggleDesktopMode(false, reload = true)
-        verify(engineSession, Mockito.atLeastOnce()).reload()
+        verify(engineSession, atLeastOnce()).reload()
     }
 
     @Test
@@ -2189,6 +2192,25 @@ class GeckoEngineSessionTest {
         })
 
         contentDelegate.value.onFirstContentfulPaint(mock())
+        assertTrue(observed)
+    }
+
+    @Test
+    fun `onPaintStatusReset notifies observers`() {
+        val engineSession = GeckoEngineSession(mock(),
+                geckoSessionProvider = geckoSessionProvider)
+
+        captureDelegates()
+
+        var observed = false
+
+        engineSession.register(object : EngineSession.Observer {
+            override fun onPaintStatusReset() {
+                observed = true
+            }
+        })
+
+        contentDelegate.value.onPaintStatusReset(mock())
         assertTrue(observed)
     }
 

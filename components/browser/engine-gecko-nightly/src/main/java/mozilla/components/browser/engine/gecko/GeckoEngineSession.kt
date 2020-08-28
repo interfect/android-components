@@ -232,7 +232,15 @@ class GeckoEngineSession(
             policy.contains(TrackingProtectionPolicy.TrackingCategory.SCRIPTS_AND_SUB_RESOURCES)
 
         geckoSession.settings.useTrackingProtection = shouldBlockContent && enabled
-        notifyAtLeastOneObserver { onTrackerBlockingEnabledChange(enabled) }
+        notifyAtLeastOneObserver {
+            // We now register engine observers in a middleware using a dedicated
+            // store thread. Since this notification can be delayed until an observer
+            // is registered we switch to the main scope to make sure we're not notifying
+            // on the store thread.
+            MainScope().launch {
+                onTrackerBlockingEnabledChange(enabled)
+            }
+        }
     }
 
     /**
@@ -680,7 +688,15 @@ class GeckoEngineSession(
             session: GeckoSession,
             historyList: GeckoSession.HistoryDelegate.HistoryList
         ) {
-            val items = historyList.map { HistoryItem(title = it.title, uri = it.uri) }
+            val items = historyList.map {
+                // title is sometimes null despite the @NotNull annotation
+                // https://bugzilla.mozilla.org/show_bug.cgi?id=1660286
+                val title: String? = it.title
+                HistoryItem(
+                    title = title ?: it.uri,
+                    uri = it.uri
+                )
+            }
             notifyObservers { onHistoryStateChanged(items, historyList.currentIndex) }
         }
     }
@@ -691,6 +707,10 @@ class GeckoEngineSession(
 
         override fun onFirstContentfulPaint(session: GeckoSession) {
             notifyObservers { onFirstContentfulPaint() }
+        }
+
+        override fun onPaintStatusReset(session: GeckoSession) {
+            notifyObservers { onPaintStatusReset() }
         }
 
         override fun onContextMenu(

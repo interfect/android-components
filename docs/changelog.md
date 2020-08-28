@@ -4,20 +4,123 @@ title: Changelog
 permalink: /changelog/
 ---
 
-# 55.0.0-SNAPSHOT (In Development)
+# 57.0.0-SNAPSHOT (In Development)
 
-* [Commits](https://github.com/mozilla-mobile/android-components/compare/v54.0.0...master)
-* [Milestone](https://github.com/mozilla-mobile/android-components/milestone/114?closed=1)
+* [Commits](https://github.com/mozilla-mobile/android-components/compare/v56.0.0...master)
+* [Milestone](https://github.com/mozilla-mobile/android-components/milestone/117?closed=1)
 * [Dependencies](https://github.com/mozilla-mobile/android-components/blob/master/buildSrc/src/main/java/Dependencies.kt)
 * [Gecko](https://github.com/mozilla-mobile/android-components/blob/master/buildSrc/src/main/java/Gecko.kt)
 * [Configuration](https://github.com/mozilla-mobile/android-components/blob/master/buildSrc/src/main/java/Config.kt)
 
+* **feature-search**
+  * ⚠️ **This is a breaking change**: `SearchFeature.performSearch` now takes a second parameter.
+  * `BrowserStoreSearchAdapter` and `SearchFeature` can now take a `tabId` parameter.
+
+* **feature-top-sites**
+  * ⚠️ **This is a breaking change**: Renames `TopSiteStorage` to `PinnedSitesStorage`.
+  * ⚠️ **This is a breaking change**: Renames `TopSiteDao` to `PinnedSiteDao`.
+  * ⚠️ **This is a breaking change**: Renames `TopSiteEntity` to `PinnedSiteEntity`.
+  * ⚠️ **This is a breaking change**: Replaces `TopSite` interface with a new generic `TopSite` data class.
+  * Implements TopSitesFeature based on the RFC [0006-top-sites-feature.md](https://github.com/mozilla-mobile/android-components/blob/master/docs/rfcs/0006-top-sites-feature.md).
+  * Downloads, redirect targets, reloads, embedded resources, and frames are no longer considered for inclusion in top sites. Please see [this Application Services PR](https://github.com/mozilla/application-services/pull/3505) for more details.
+
+* **lib-push-firebase**
+  * Removed non-essential dependency on `com.google.firebase:firebase-core`.
+
+* **feature-toolbar**
+  * Added `ContainerToolbarFeature` to update the toolbar with the container page action whenever
+    the selected tab changes.
+
+* **feature-prompts**
+  * Replaced generic icon in `LoginDialogFragment` with site icon (keep the generic one as fallback)
+
+* **ui-widgets**
+  * 🆕 New VerticalSwipeRefreshLayout that comes to resolve many of the issues of the platform SwipeRefreshLayout and filters out other gestures than swipe down/up.
+
+# 56.0.0
+
+* [Commits](https://github.com/mozilla-mobile/android-components/compare/v55.0.0...v56.0.0)
+* [Milestone](https://github.com/mozilla-mobile/android-components/milestone/116?closed=1)
+* [Dependencies](https://github.com/mozilla-mobile/android-components/blob/v55.0.0/buildSrc/src/main/java/Dependencies.kt)
+* [Gecko](https://github.com/mozilla-mobile/android-components/blob/v55.0.0/buildSrc/src/main/java/Gecko.kt)
+* [Configuration](https://github.com/mozilla-mobile/android-components/blob/v55.0.0/buildSrc/src/main/java/Config.kt)
+
+* **feature-prompts**
+  * 🌟 Added optional `LoginPickerView` and `onManageLogins` params to `PromptFeature` for a new [LoginPicker] to display a view for selecting one of multiple matching saved logins to fill into a site.
+
+* **concept-tabstray**
+  * 🌟 Added `onTabsUpdated` to `TabsTray.Observer` for notifying observers when one or more tabs have been added/removed.
+
+* **browser-tabstray**
+  * 🌟 Added the convenience function `TabsAdapter.doOnTabsUpdated` for performing actions only once when the tabs are updated.
+
+* **feature-app-links**
+  * 🚒 Bug fixed [issue #8169](https://github.com/mozilla-mobile/android-components/issues/8169) App links dialog will now call `showNow` to immediately show the dialog.
+
+* **browser-thumbnails**
+  * 🌟 Exposed `BrowserThumbnail.requestThumbnail` API for consumers.
+
+* **browser-engine-gecko-nightly**
+  * 🌟 Added `onPaintStatusReset` when a session's paint has been reset.
+  * 🚒 Bug fixed [issue #8123](https://github.com/mozilla-mobile/android-components/issues/8123) Fix history title crash.
+
+* **browser-engine-gecko-beta and **browser-engine-gecko **
+  * 🚒 Bug fixed [issue #8123](https://github.com/mozilla-mobile/android-components/issues/8123) Fix history title crash.
+
+* **concept-menu**
+  * 🌟 Added `MenuStyle` class to set menu background and width.
+
+* **browser-menu**
+  * 🌟 Added `style` parameter to `BrowserMenu.show`.
+  * 🚒 Bug fixed [issue #8223](https://github.com/mozilla-mobile/android-components/issues/8223): Fix compound drawable position for RTL.
+
+* **browser-menu2**
+  * 🌟 Added `style` parameter to `BrowserMenuController`.
+
+* **ui-widgets**
+  * 🌟 Added widget for showing a website in a list, such as in bookmarks or history. The `mozac_primary_text_color` and `mozac_caption_text_color` attributes should be set.
+
+* **browser-icons**
+  * 🌟 Expose `BrowserIcons.clear()` as a public API to remove all saved data from disk and memory caches.
+
+* **feature-downloads**
+  * 🚒 Bug fixed [issue #8202](https://github.com/mozilla-mobile/android-components/issues/8202): Download's ui were always showing failed status.
+
+* **feature-pwa**
+  * ⚠️ **This is a breaking change**: The `SiteControlsBuilder` interface has changed. `buildNotification` now takes two parameters: `Context` and `Notification.Builder`.
+  * `WebAppSiteControlsFeature` now supports displaying monochrome icons.
+
+* **service-glean**
+  * Glean was updated to v32.1.1
+      * Support installing glean_parser in offline mode.
+      * Fix a startup crash on some Android 8 (SDK=25) devices, due to a [bug in the Java compiler](https://issuetracker.google.com/issues/110848122#comment17).
+
+* **feature-readerview**
+  * 🚒 Bug fixed [issue #8208](https://github.com/mozilla-mobile/android-components/issues/8208): Add a link to the original page in Reader Mode.
+
+* **feature-addons**
+  * 🌟 Feature [issue #8200](https://github.com/mozilla-mobile/android-components/issues/8200): "users" in add-ons manager should be renamed to "reviews".
+
+# 55.0.0
+
+* [Commits](https://github.com/mozilla-mobile/android-components/compare/v54.0.0...v55.0.0)
+* [Milestone](https://github.com/mozilla-mobile/android-components/milestone/115?closed=1)
+* [Dependencies](https://github.com/mozilla-mobile/android-components/blob/v55.0.0/buildSrc/src/main/java/Dependencies.kt)
+* [Gecko](https://github.com/mozilla-mobile/android-components/blob/v55.0.0/buildSrc/src/main/java/Gecko.kt)
+* [Configuration](https://github.com/mozilla-mobile/android-components/blob/v55.0.0/buildSrc/src/main/java/Config.kt)
+
 * **browser-engine-gecko**, **browser-engine-gecko-beta**, **browser-engine-gecko-nightly**
   * Fixed issue [#7983](https://github.com/mozilla-mobile/android-components/issues/7983), crash when a file name wasn't provided when uploading a file.
-  
+
 * **service-glean**
   * Glean was updated to v32.1.0
     * The rate limiter now allows 15, rather than 10, pings per minute.
+
+* **storage-sync**
+  * Fixed [issue #8011](https://github.com/mozilla-mobile/android-components/issues/8011) PlacesConnectionBusy: Error executing SQL: database is locked.
+
+* **feature-app-links**
+  * Fixed [issue #8122](https://github.com/mozilla-mobile/android-components/issues/8122) App link redirecting to Play Store, rather than to installed app.
 
 # 54.0.0
 
@@ -35,13 +138,13 @@ permalink: /changelog/
 
 * **feature-app-links**
   * Added `loadUrlUseCase` as a parameter for `AppLinksFeature`.  This is used to load the URL if the user decides to not launch the link in the external app.
-  
+
 * **concept-awesomebar**
   * Added `AwesomeBar.setOnEditSuggestionListener()` to register a callback when a search term is selected to be edited further.
 
 * **browser-toolbar**
   * `BrowserToolbar.setSearchTerms()` can now be called during `State.EDIT`
-  
+
 * **browser-awesomebar**
   * The view of `DefaultSuggestionViewHolder` now contains a button to select a search term for further editing. Clicking it will invoke the callback registered in `BrowserAwesomeBar.setOnEditSuggestionListener()`
 
@@ -51,11 +154,17 @@ permalink: /changelog/
 * **feature-addons**
   * ⚠️ **This is a breaking change**: Added a `collectionAccount` constructor argument to `AddonCollectionProvider` to override the default of `mozilla`. It has been inserted into the middle of the argument list, before `collectionName`, so code that passed later arguments positionally will need to change.
 
+* **browser-menu**
+  * For a11y, `BrowserMenuImageSwitch` now highlights the entire row, not just the switch
+
 * **concept-engine**
   * Added the `cookiePurging` property to `TrackingProtectionPolicy` and `TrackingProtectionPolicyForSessionTypes` constructors to enable/disable cookie purging feature read more about it [here](https://blog.mozilla.org/blog/2020/08/04/latest-firefox-rolls-out-enhanced-tracking-protection-2-0-blocking-redirect-trackers-by-default/).
 
 * **browser-engine-nightly**
   * Added `cookiePurging` to `TrackingProtectionPolicy.toContentBlockingSetting`.
+
+* **feature-addons**
+  * ⚠️ **This is a breaking change**: Unified addons icons design with the one of favicons used all throughout the app. Specifying a different background is not possible anymore.
 
 # 53.0.0
 
@@ -94,11 +203,14 @@ permalink: /changelog/
   * ⚠️ **This is a breaking change**: `DownloadsFeature` is no longer accepting a custom download dialog but supporting customizations via the `promptStyling` parameter. The `dialog` parameter was unused so far. If it's required in the future it will need to be replaced with a lambda or factory so that the feature can create instances of the dialog itself, as needed.
 
 * **feature-webcompat-reporter**
-  * Added a second parameter to the `install` method: `productName` allows to provide a unique product name per usage for automatic product-labelling on webcompat.com 
+  * Added a second parameter to the `install` method: `productName` allows to provide a unique product name per usage for automatic product-labelling on webcompat.com
 
 * **feature-contextmenu**
   * Do not show the "Download link" option for html URLs.
   * Uses a speculative check, may not work in all cases.
+
+* **ui-widgets**
+  * Added shared ImageView style for favicons. The `mozac_widget_favicon_background_color` and `mozac_widget_favicon_border_color` attributes should be set, then `style="@style/Mozac.Widgets.Favicon"` can be added to an ImageView.
 
 # 52.0.0
 

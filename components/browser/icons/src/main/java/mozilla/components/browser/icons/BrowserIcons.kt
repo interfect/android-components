@@ -72,7 +72,7 @@ internal val sharedDiskCache = IconDiskCache()
  * Entry point for loading icons for websites.
  *
  * @param generator The [IconGenerator] to generate an icon if no icon could be loaded.
- * @param decoders List of [IconDecoder] instances to use when decoding a loaded icon into a [android.graphics.Bitmap].
+ * @param decoders List of [ImageDecoder] instances to use when decoding a loaded icon into a [android.graphics.Bitmap].
  */
 class BrowserIcons(
     private val context: Context,
@@ -238,7 +238,7 @@ class BrowserIcons(
      * If custom [IconLoader] and [IconProcessor] instances with a custom storage are provided to
      * [BrowserIcons] then the calling app is responsible for clearing that data.
      */
-    private fun clear() {
+    fun clear() {
         sharedDiskCache.clear(context)
         sharedMemoryCache.clear()
     }
